@@ -4,7 +4,8 @@ This is the code used for usng the seabird risk assessment method
 to analyse seabird bycatch in southern hemisphere (south of 20°S) surface longline fisheries.
 The work was carried out as part of the Areas Beyond National Jurisdiction (ABNJ)
 global seabird bycatch (GBSA) project. The analysis was carried out at a workshop in 
-Kruger National Park, South Africa, during Fenruary 2019. 
+Kruger National Park, South Africa, during February 2019. Particpants carried out analysis
+on a joint dataset, with the combined data not being avauilable outside of the workshop. 
 
 The seabird risk assessment method was applied to observed bycatch data collated
 from the countries who particpated in the workshop; to seabird distributions

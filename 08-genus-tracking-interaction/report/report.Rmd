@@ -1,0 +1,409 @@
+---
+title: Seabird risk assessment - Kruger Feb 2019
+date: "`r Sys.Date()`"
+output:
+  rmdformats::readthedown:
+    mathjax: null
+    use_bookdown: false
+    lightbox: true
+    thumbnails: false
+    css: custom.css
+    gallery: true
+    toc_depth: 3
+    toc_float:
+      collapsed: true
+      smooth_scoll: true
+mode: selfcontained
+---
+
+
+```{r, echo=F}
+library(rmarkdown)
+library(knitr)
+library(data.table)
+library(kableExtra)
+source('../../functions.r')
+opts_chunk$set(message = FALSE, warning = FALSE, error = FALSE, tidy = FALSE, cache = FALSE,results = 'asis' )
+```
+
+
+
+```{r echo=F, warning= F, message=F}
+spplist  <- fread('../acap-species-list.csv')[base_species == T]
+
+source('../../config.r')
+source('../../labs.r')
+fgroups <- fread('../generated/fishery-groups.csv')
+
+```
+
+----
+
+# Input data
+
+## Species distribution
+
+Average bird density across seasons.
+
+```{r echo=F, results='asis'}
+for (i in 1:nrow(spplist)) {
+    sp <- spplist[i, code.sra]
+    cat('<div style="float: left; width: 48%; align: top;">\n')
+    cat(sprintf('<h4>%s</h4>\n', spplist[i, upper1st(cname)]))
+    cat(sprintf('<img src="assets/distribution-%s.png" style="float: center; width: 100%%; margin-right: 1%%; margin-bottom: 0.5em;">\n\n', sp))
+    cat('</div>\n')
+}
+```
+<p style="clear: both;">
+
+----
+
+<!-- ## Species demography -->
+
+<!-- ```{r echo=F} -->
+
+<!-- demsumm <- fread('../generated/demographics-summary.csv') -->
+<!-- demsumm <- demsumm[species != 'ROY'] -->
+<!-- options(knitr.kable.NA = '') -->
+<!-- demsumm[variable %in% c('scurr', 'sopt'), -->
+<!--         `:=`(mean_f = sprintf('%0.3f', mean), -->
+<!--              lcl_f = sprintf('%0.3f', lcl), -->
+<!--              ucl_f = sprintf('%0.3f', ucl))] -->
+<!-- demsumm[variable %in% c('a'), -->
+<!--         `:=`(mean_f = sprintf('%0.1f', mean), -->
+<!--              lcl_f = sprintf('%0.1f', lcl), -->
+<!--              ucl_f = sprintf('%0.1f', ucl))] -->
+<!-- demsumm[variable %in% c('pb'), -->
+<!--         `:=`(mean_f = sprintf('%0.3f', mean), -->
+<!--              lcl_f = sprintf('%0.3f', lcl), -->
+<!--              ucl_f = sprintf('%0.3f', ucl))] -->
+<!-- demsumm[variable %in% c('nbp', 'ntot', 'ntot_post'), -->
+<!--         `:=`(mean_f = format(round(signif(mean, 3)), big.mark=' ', trim=T), -->
+<!--              lcl_f = format(round(signif(lcl, 3)), big.mark=' ', trim=T), -->
+<!--              ucl_f = format(round(signif(ucl, 3)), big.mark=' ', trim=T))] -->
+<!-- demsumm[, ci_f := sprintf('(%s -- %s)', lcl_f, ucl_f)] -->
+
+<!-- demsumm <- demsumm[, .(spname, varname, mean_f, ci_f)] -->
+
+<!-- k <- kable(demsumm[, -1], 'html', align = 'rrr', col.names = c('Parameter', 'Mean', '95% c.i.'), -->
+<!--       caption = 'Demographic parameters.') %>% -->
+<!--     kable_styling(bootstrap_options = c("hover", "condensed"), full_width=F) -->
+<!-- sppl <- unique(demsumm$spname) -->
+<!-- for (i in seq_along(sppl)) { -->
+<!--     k <- k %>% group_rows(sppl[i], min(which(demsumm$spname == sppl[i])), max(which(demsumm$spname == sppl[i]))) -->
+<!-- } -->
+<!-- k -->
+<!-- ``` -->
+
+
+<!--## Fishing effort-->
+<!---->
+<!--### Total effort-->
+<!---->
+<!--Mean annual fishing effort by fishery group over the period `r min(YEARS_PRED)` to `r max(YEARS_PRED)`.-->
+<!---->
+<!--```{r echo=F, results='asis'}-->
+<!---->
+<!--efffiles <- data.table(file=dir('assets', 'map-effort_tot_.*_quarter0.png'))-->
+<!--fg=fgroups$fishery_group[1]-->
+<!--for (fg in unique(fgroups$fishery_group)) {-->
+<!--    filename <- file.path('assets', sprintf('map-effort_tot_%s_quarter0.png',-->
+<!--                                            fgroups[match(fg, fishery_group), slug]))-->
+<!--    cat('<div style="float: left; width: 48%; align: top;">\n')-->
+<!--    cat(sprintf('<h4>%s</h4>\n', fg))-->
+<!--    cat(sprintf('<img src="%s" style="float: center; width: 100%%; margin-right: 1%%; margin-bottom: 0.5em;">\n\n',-->
+<!--                filename))-->
+<!--    cat('</div>\n')-->
+<!--}-->
+<!--```-->
+<!--<p style="clear: both;">-->
+<!---->
+
+## Observed captures
+
+## Observed captures by quarter
+
+
+
+```{r echo=F}
+
+## *** Table of observed captures
+ocap <- fread('assets/table-observed-captures.csv')
+x <- kable(ocap, digits = c(NA, NA, rep(0, 5)), booktabs = T, align = 'lrrrrr', format = 'html',
+           col.names = c('Group', 'Taxa', '1st', '2nd', '3rd', '4th', 'Overall'),
+           caption = 'Number of observed captures by taxa and quarter.') %>%
+    kable_styling(bootstrap_options = c("striped", "hover", "condensed"), full_width=F)
+x <- add_header_above(x, c(" ", " ", 'Quarter' = 4, " "))
+print(x)
+
+
+```
+## Observed captures by genus
+
+```{r echo=F}
+
+omaps <- dir('assets', '^map-observed-captures_.*.png', full.names=T)
+spgs <- sub('.*map-observed-captures_([A-Z]+)\\..*', '\\1', omaps)
+for (spg in spgs) {
+    filename <- file.path('assets', sprintf('map-observed-captures_%s.png', spg))
+    cat('<div style="float: left; width: 48%; align: top;">\n')
+    cat(sprintf('<h4>%s</h4>\n', labs[spg]))
+    cat(sprintf('<img src="%s" style="float: center; width: 100%%; margin-right: 1%%; margin-bottom: 0.5em;">\n\n',
+                filename))
+    cat('</div>\n')
+}
+```
+<p style="clear: both;">
+
+
+
+----
+
+
+# Estimated Annual Captures (EAC)
+
+## Overall total
+
+```{r echo=F,results='asis'}
+apf <- readRDS('../generated/apf-samples.rds')
+aui <- quantile(apf[, .(apf=sum(apf)), sample]$apf, 0.975)
+ali <- quantile(apf[, .(apf=sum(apf)), sample]$apf, 0.025)
+amean <- mean(apf[, .(apf=sum(apf)), sample]$apf)
+cat(sprintf('<h3> Total captures: %s (%s to %s) </h3>', round(amean), round(ali), round(aui))) 
+
+```
+
+## Captures by species (2016)
+
+
+
+
+```{r echo=F}
+
+apf_sp <- fread('../generated/apf-summary.csv')
+apf_sp[, ci95 := sprintf('%0.0f -- %0.0f', lcl, ucl)]
+apf_sp <- apf_sp[, .(common_name, mean=round(mean,1), ci95)]
+
+kable(apf_sp, 'html', digits = c(NA, 0, NA), align = 'lrr',
+      caption = 'Estimated Annual Captures in commercial fisheries in the southern hemisphere') %>%
+        kable_styling(bootstrap_options = c("striped", "hover", "condensed"), full_width=F)
+
+```
+
+
+
+```{r echo=F, results='asis'}
+
+if (file.exists('assets/apf-by-site.csv')) {
+   cat('----\n')
+   cat('### Captures by species and site\n\n')
+   apf_site <- fread('assets/apf-by-site.csv')
+   apf_site <- apf_site[order(spplist[match(apf_site$code, code.sra), order], site)]
+   apf_site <- apf_site[!is.na(mean)]
+   apf_site[, ci95 := sprintf('%0.0f -- %0.0f', lcl, ucl)]
+   apf_site <- apf_site[, .(common_name, site, mean=round(mean,1), ci95)]
+   
+   k <- kable(apf_site[, -'common_name', with=F], 'html', digits = c(NA, 0, NA), align = 'lrr',
+              col.names=c('Colony site', 'Mean', '95% c.i.'),
+              caption = 'Annual potential fatalities in commercial fisheries in the southern hemisphere by taxa and colony site') %>%
+       kable_styling(bootstrap_options = c("striped", "hover", "condensed"), full_width=F)
+   for (s in unique(apf_site$common_name)) {
+       k <- k %>% group_rows(s, apf_site[, min(which(common_name == s))], apf_site[, max(which(common_name == s))])
+   }
+   print(k)
+}
+```
+
+----
+
+
+##  Spatial distribution of captures
+
+```{r echo=F, results='asis'}
+apf_maps <- dir('assets', '^apf-map', full.names=T)
+apf_maps_spp <- sub('.*apf-map-([A-Z]+)\\.png', '\\1', apf_maps)
+apf_maps_spp <- intersect(spplist$code.sra, apf_maps_spp) # reorder
+for (sp in apf_maps_spp) {
+    
+    spname <- spplist[match(sp, code.sra), upper1st(cname)]
+    cat('<div style="float: left; width: 48%; align: top;">\n')
+    cat(sprintf('<h4>%s</h4>\n', spname))
+    cat(sprintf('<img src="assets/apf-map-%s.png" style="float: center; width: 100%%; margin-right: 1%%; margin-bottom: 0.5em;">\n\n', sp))
+    cat('</div>\n')
+}
+```
+<p style="clear: both;">
+
+
+
+
+```{r echo=F}
+if (file.exists('../generated/risk-ratios-summary.csv')) {
+    cat('----\n')
+    cat('## Risk\n\n')
+    riskratios <- fread('../generated/risk-ratios-summary.csv')
+    riskratios <- riskratios[, .(cname, pst_mean, pst_ci, apf_mean, apf_ci, rr_med, rr_ci, rr_p_ov_1)]
+    riskratios[order(-rr_p_ov_1)]
+    x <- kable(riskratios, digits = c(NA, 0, NA, 0, NA, 1, NA, 2), booktabs = T, align = 'lrlrlrlr', format = 'html',
+               col.names = c('Taxa', 'Mean', '95% c.i.', 'Mean', '95% c.i.', 'Median', '95% c.i.', 'p(EAC>PST)'),
+              caption = 'Population Sustainability Threshold (PST), Estimated Annual Captures (EAC), and risk ratio (EAC/ PST) of the studied seabird taxa in the southern hemisphere commercial fisheries. The mean and 95% credible interval are shown for PST and captures, and the median and 95% credible interval are shown for the risk ratio. p(EAC>PST) indicates the probability for EAC to exceed PST') %>%
+        kable_styling(bootstrap_options = c("striped", "hover", "condensed"), full_width=F)
+    x <- add_header_above(x, c("Taxa" = 1, "PST" = 2, "EAC" = 2, "Risk ratio" = 3))
+    print(x)
+    
+    if (file.exists("assets/plot-risk-ratios.png")) {
+        cat('\n![Distribution of the risk ratio of the studied seabird taxa in the southern hemisphere commercial fisheries. The vertical line at the center of each envelope indicates the median risk ratio. The vertical black line shows the limit above which EAC > PST.](assets/plot-risk-ratios.png)\n\n')
+    }
+    
+}
+```
+
+
+----
+
+# MCMC diagnostics
+
+Trace of the MCMC chains for the vulnerability parameters (intercept,
+fishery groups, and species groups). The vulnerability of reference
+groups was fixed to 1.
+
+```{r echo=F, results='asis'}
+cat('<img src="assets/traces_vulnerabilities.png" width="100%%">\n\n')
+```
+
+------
+
+```{r echo=F, results='asis'}
+
+if (file.exists("assets/observed-vs-predicted-captures-species.png")) {
+    cat('\n# Comparison of observed and predicted captures\n\n')
+
+    cat('The comparison of the observed number of captures with the predicted
+number of captures among all strata provides an indication of the
+model fit and may highlight issues about the assumption of the model
+(e.g. grouping of species or fisheries).\n')
+
+    cat('<img src="assets/observed-vs-predicted-captures-species.png" width="100%">\n')
+
+    ## strata <- fread('assets/observed-vs-predicted-captures.csv')
+    ## outs <- strata[out == T]
+    
+    cat('\n\n------\n\n')
+}
+```
+
+
+```{r echo=F, results='asis'}
+if (file.exists('assets/vulnerabilities.csv')) {
+    cat("# Vulnerability estimates\n")
+    if (file.exists('assets/vulnerabilities.csv')) {
+        vuls <- fread('assets/vulnerabilities.csv')
+        vuls[, ci := sprintf('(%0.3f -- %0.3f)', lcl, ucl)]
+        vuls <- vuls[, -c('lcl', 'ucl', 'min', 'max'), with=F]
+        ## vuls[shift(par_lab,1,fill='') == par_lab, par_lab := '']
+        k <- kable(vuls[, -1], 'html', align = 'rrrr',
+                  col.names=c('Group', 'Mean', '95% c.i.'),
+              caption = 'Vulnerability parameters estimated by the model.  For each species and fishery group, the overall vulnerability is the multiplication of `Intercept` and the corresponding `Fishery group`, `Species group`, and `Species x fishery group`',
+              digits  = 3) %>%
+            kable_styling(bootstrap_options = c("hover", "condensed"), full_width=F)
+
+        pars <- unique(vuls$par_lab)
+        for (i in seq_along(pars)) {
+            k <- k %>% group_rows(pars[i], min(which(vuls$par_lab == pars[i])), max(which(vuls$par_lab == pars[i])))
+        }
+        k
+    }
+}
+```
+
+```{r echo=F, results='asis'}
+
+if (file.exists("assets/vulnerability-total-matrix.png")) {
+    cat('\n## Comparison of empirical and estimated vulnerabilities\n\n')
+
+##     cat('The comparison of the observed number of captures with the predicted
+## number of captures among all strata provides an indication of the
+## model fit and may highlight issues about the assumption of the model
+## (e.g. grouping of species or fisheries).\n')
+    cat('\n### Empirical vulnerability\n')
+    cat('<img src="assets/vulnerability-empirical-matrix.png" width="100%">\n')
+    ## cat('\n### Estimated vulnerability, coloured by lower 95% credible limit\n')
+    ## cat('<img src="assets/vulnerability-total-matrix-lcl.png" width="100%">\n')
+    cat('\n### Estimated vulnerability, coloured by mean\n')
+    cat('<img src="assets/vulnerability-total-matrix.png" width="100%">\n')
+
+    cat('\n\n------\n\n')
+}
+```
+
+
+```{r echo=F, results='asis'}
+if (file.exists('assets/vulnerabilities.csv')) {
+    if (file.exists('assets/vulnerabilities_comparison-prior-posterior.png'))
+        cat('<img src="assets/vulnerabilities_comparison-prior-posterior.png" width="100%">\n')
+        
+}
+```
+
+
+
+
+```{r echo=F, results='asis'}
+if (file.exists('assets/observed-vs-predicted-vulnerabilities.csv')) {
+    cat("# Comparison of results with dummy data
+
+Since the captures were simulated from fixed and therefore known
+parameters, we can compare the results of the model with the values
+used for the creation of the data.
+
+## Vulnerabilities
+")
+    if (file.exists('assets/observed-vs-predicted-vulnerabilities.png'))
+        cat('<img src="assets/observed-vs-predicted-vulnerabilities.png" width="100%">\n\n')
+    vulcomp <- fread('assets/observed-vs-predicted-vulnerabilities.csv')
+    vulcomp <- vulcomp[vulnerability < lcl | vulnerability > ucl]
+    vulcomp <- vulcomp[, .(lab, fishery_group, species_group, simulated = vulnerability, mean, lcl, ucl)]
+    if (nrow(vulcomp)) {
+        kable(vulcomp, col.names=c('Parameter type', 'Fishery group', 'Species group', 'Simulated value', 'Mean', 'Lower c.l.', 'Upper c.l.'), caption = 'Vulnerability parameters for which the simulated value was outside the estimated 95% credible interval')
+    }
+}
+```
+
+```{r echo=F, results='asis'}
+
+if (file.exists("assets/observed-vs-predicted-incidents.png")) {
+    cat('\n## Total number of incidents\n\n')
+
+    cat('Comparison of the total estimated number of incidents (observable or not) with the simulated number, for each combination of fishery group and species, in all observed fishing effort.\n\n')
+    
+    cat('<img src="assets/observed-vs-predicted-incidents.png" width="100%">\n')
+}
+
+```
+
+<!--```{r echo=F, results='asis'}-->
+<!---->
+<!--if (file.exists("assets/comparison-with-actual_probabilities.png")) {-->
+<!--    cat('\n## Probability parameters\n\n')-->
+<!---->
+<!--    cat('Comparison of the estimated probability parameters (histograms) with the actual value used to simulate the dataset (red vertical line).\n\n')-->
+<!--    -->
+<!--    cat('<img src="assets/comparison-with-actual_probabilities.png" width="100%">\n')-->
+<!--}-->
+<!---->
+<!--```-->
+
+```{r echo=F, results='asis'}
+
+if (file.exists("assets/comparison-with-actual_populations.png")) {
+    cat('\n## Total population size\n\n')
+
+    cat('Comparison of the posterior distribution of the total population size from the vulnerability model (blue envelope) with the prior distribution (red envelope) and the actual population size used to simulate the dataset (red vertical line).\n\n')
+    
+    cat('<img src="assets/comparison-with-actual_populations.png" width="100%">\n')
+}
+
+```
+
+
+

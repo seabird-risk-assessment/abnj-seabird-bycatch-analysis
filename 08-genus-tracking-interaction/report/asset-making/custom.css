@@ -1,0 +1,172 @@
+/* <link href="https://fonts.googleapis.com/css?family=Maven+Pro" rel="stylesheet"> */
+
+/* @import url("https://fonts.googleapis.com/css?family=Maven+Pro|Open+Sans"); */
+/* @import url("https://fonts.googleapis.com/css?family=Pontano+Sans|Open+Sans"); *\/ */
+html {
+  font-family: 'Maven Pro', sans-serif;
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+}
+
+td, p, body {
+    font-family: 'Maven Pro', sans-serif;
+}
+
+h1,h2,h3,h4,h5,h6,legend{
+    color: #173d69;
+    font-family: 'Maven Pro', sans-serif;
+}
+
+/* .bg { */
+/*     background-image: url("bg.png"); */
+/*     height: 100%; */
+/*     background-position: center; */
+/*     background-repeat: no-repeat; */
+/*     background-size: cover; */
+/* } */
+
+#main .nav-pills > li.active > a,
+#main .nav-pills > li.active > a:hover,
+#main .nav-pills > li.active > a:focus {
+   background-color: #2171B5;
+}
+
+#table-of-contents {
+    background-color: #173d69;
+    /* background-image: url("bg.png"); */
+}
+
+#postamble {
+   background-color: #14365c;
+   background: #14365c url(Wings.png) right no-repeat;
+   background-size: 70px 70px;
+   border-top-color: #14365c;
+}
+
+/* #table-of-contents:after { */
+/*     content: ''; */
+/*     display: block; */
+/*     height: 40px;  /\*height of icon *\/ */
+/*     width: 40px;  /\*width of icon *\/ */
+/*     position: absolute; */
+/*     /\*where to replace the icon *\/ */
+/*     top: 0px; */
+/*     left: -40px; */
+/*     /\*background *\/ */
+/*     background: #F8E6AE url(Wings.png) no-repeat 0px 0px; */
+/* } */
+
+#table-of-contents ul.nav > li > a {
+    color: #FFFFAA !important;
+    background-color: #173d69 !important;
+}
+
+#table-of-contents ul.nav > li.active > a {
+    color: #FFFFAA !important;
+    background-color: #1d4e86 !important;
+    border-bottom-color: #1d4e86 !important;
+    font-weight: 700;
+}
+
+#table-of-contents a {
+    color: #FFFFAA;
+}
+
+#table-of-contents ul.nav > li > a:hover,
+#table-of-contents ul.nav > li.active > a:hover,
+#table-of-contents ul.nav > li.active > ul > li > a:hover,
+#table-of-contents ul.nav > li.active > ul > li.active > a:hover,
+#table-of-contents ul.nav > li.active > ul > li.active > ul > li > a:hover,
+#table-of-contents ul.nav > li.active > ul > li.active > ul > li.active > a:hover {
+    background-color: #052448 !important;
+    /* color: #FFFFFF !important; */
+}
+
+#table-of-contents ul.nav > li.active > ul > li.active > a {
+    background-color: #2664ab !important;
+    color: #FFFFFF !important;
+    border-bottom-color: #2664ab !important;
+    font-weight: 400;
+    border-bottom-color: #2664ab !important;
+    
+}
+
+#table-of-contents ul.nav > li.active > ul > li.active > ul > li > a {
+    background-color: #2b73c5 !important;
+    border-bottom-color: #2b73c5 !important;
+    border-bottom-color: #2b73c5 !important;
+    color: #FFFFFF !important;
+    font-weight: 400;
+}
+
+#table-of-contents ul.nav > li.active > ul > li.active > ul > li.active > a {
+    background-color: #367fd3 !important;
+    border-bottom-color: #367fd3 !important;
+    border-bottom-color: #367fd3 !important;
+    color: #FFFFFF !important;
+    font-weight: 400;
+}
+
+#table-of-contents ul.nav > li.active > ul > li > a {
+    color: #FFFFFF !important;
+    font-weight: 400;
+}
+
+#table-of-contents a:hover {
+    background-color: #04203F !important;
+}
+
+#table-of-contents ul.nav > li.active > ul > li > a {
+    background-color: #1d4e86 !important;
+}
+
+
+.nav > li.active {
+   background-color: #2171B5;
+}
+
+#main .nav-pills > li > a:hover {
+  background-color: #2171B5;
+}
+
+
+#nav-top span.glyphicon {
+  color: #031a35;
+}
+
+#table-of-contents header{
+    color: #031a35;
+}
+
+#table-of-contents h2{
+    background-color:#031a35;
+}
+
+#content {
+    max-width: 1200px;
+}
+
+.center-small {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 40%;
+}
+
+.center-large {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 80%;
+}
+
+/* #main a { */
+/*     background-image: linear-gradient(180deg,#d64a70,#d64a70); */
+/*     color:#c7254e; */
+/* } */
+
+a,
+a:visited,
+a:hover{
+    color:#AAAAAA
+}

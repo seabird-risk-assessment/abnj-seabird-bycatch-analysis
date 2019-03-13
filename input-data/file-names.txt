@@ -1,0 +1,14 @@
+acap-species-list.csv
+cryptic-mortality/p_observable.rdata
+effort-captures/combined_species.csv
+effort-captures/combined_total.csv
+effort-captures/effort-total-RFMO.csv
+effort-captures/NZL/total-effort.csv
+grid/grids.rdata
+species-demography/colony-population-sizes-samples.rds
+species-demography/demographic-parameters.csv
+species-demography/nu.rds
+species-demography/pop-corrections.rdata
+species-distributions/birdlife-range-maps-densities.rds
+species-distributions/tracking-distributions-densities.rds
+species-distributions/tracks_sp_col.gpkg
